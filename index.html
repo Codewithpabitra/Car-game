@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Car Game</title>
+    <style>
+      canvas {
+        background: black;
+        display: block;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="gameCanvas" width="400" height="600"></canvas>
+
+    <script>
+      // 1. Get canvas and drawing tool
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+
+      // 2. Player (Car) object
+      const player = {
+        x: 180,
+        y: 500,
+        width: 40,
+        height: 80,
+        speed: 5,
+      };
+
+      // 3. Store pressed keys
+      const keys = {};
+
+      // 4. Detect key press
+      window.addEventListener("keydown", function (e) {
+        keys[e.key] = true;
+      });
+
+      // 5. Detect key release
+      window.addEventListener("keyup", function (e) {
+        keys[e.key] = false;
+      });
+
+      // 6. Update game logic
+      function update() {
+        // Move left
+        if (keys["ArrowLeft"]) {
+          player.x -= player.speed;
+        }
+
+        // Move right
+        if (keys["ArrowRight"]) {
+          player.x += player.speed;
+        }
+
+        // Prevent going outside canvas
+        if (player.x < 0) player.x = 0;
+        if (player.x + player.width > canvas.width)
+          player.x = canvas.width - player.width;
+      }
+
+      // 7. Draw everything
+      function draw() {
+        // Clear screen
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw car
+        ctx.fillStyle = "red";
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+      }
+
+      // 8. Game loop
+      function gameLoop() {
+        update();
+        draw();
+        requestAnimationFrame(gameLoop);
+      }
+
+      // 9. Start game
+      gameLoop();
+    </script>
+  </body>
+</html>
